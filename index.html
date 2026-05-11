@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadowrocket Config Generator</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--soft:#f8fafc;--text:#0f172a;--muted:#64748b;--border:#dbe3ee;--accent:#6366f1;--accent-soft:#eef2ff;--green:#10b981;--green-soft:#ecfdf5;--blue:#3b82f6;--blue-soft:#eff6ff;--red:#ef4444;--red-soft:#fef2f2;--shadow:0 10px 30px rgba(15,23,42,.06)}
+html.dark{--bg:#0f172a;--card:#1e293b;--soft:#020817;--text:#e2e8f0;--muted:#94a3b8;--border:#334155;--accent:#818cf8;--accent-soft:#1e1b4b;--green:#34d399;--green-soft:#052e22;--blue:#60a5fa;--blue-soft:#082f49;--red:#f87171;--red-soft:#3f0d12;--shadow:none}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;transition:.2s} .wrap{max-width:1050px;margin:0 auto;padding:32px 16px} .grid{display:grid;grid-template-columns:1.2fr .95fr;gap:18px} @media(max-width:980px){.grid{grid-template-columns:1fr}} .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.h1{font-size:30px;font-weight:800;margin:0 0 4px}.muted{color:var(--muted)} .row{display:flex;gap:10px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.step{display:flex;align-items:center;gap:10px;margin-bottom:12px}.num{width:24px;height:24px;border-radius:999px;background:var(--accent-soft);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}.title{font-size:15px;font-weight:700}.sub{font-size:12px;color:var(--muted)}
+select,textarea,input{width:100%;background:var(--soft);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;outline:none} textarea{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical;min-height:96px} select:focus,textarea:focus,input:focus{border-color:var(--accent)}
+.btn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:11px 14px;border-radius:10px;font-size:14px;cursor:pointer}.btn:hover{border-color:var(--accent)} .btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;font-weight:700}.btn-primary:disabled{opacity:.55;cursor:not-allowed}.tiny{font-size:12px}
+.theme{display:inline-flex;border:1px solid var(--border);background:var(--card);border-radius:999px;padding:4px;gap:4px}.theme button{border:none;background:transparent;color:var(--muted);padding:7px 10px;border-radius:999px;cursor:pointer;font-size:12px}.theme button.active{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.presets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.preset{border:1px solid var(--border);border-radius:14px;padding:14px;background:var(--soft);cursor:pointer;transition:.15s}.preset:hover{border-color:var(--accent);transform:translateY(-1px)} .preset.active{border-color:var(--accent);background:var(--accent-soft)} .preset h3{margin:0 0 6px;font-size:14px}.preset p{margin:0;font-size:12px;color:var(--muted);line-height:1.45} @media(max-width:760px){.presets{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid var(--border);background:var(--soft);color:var(--text);border-radius:999px;padding:7px 10px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;user-select:none}.chip small{padding:2px 8px;border-radius:999px;background:transparent;color:var(--muted);border:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.04em}.chip.proxy{border-color:var(--green);background:var(--green-soft)} .chip.proxy small{border-color:var(--green);color:var(--green)} .chip.direct{border-color:var(--blue);background:var(--blue-soft)} .chip.direct small{border-color:var(--blue);color:var(--blue)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar .btn{padding:8px 10px;font-size:12px}
+.note{padding:12px 14px;border:1px solid var(--border);background:var(--soft);border-radius:12px;font-size:12px;color:var(--muted);line-height:1.5}.preview{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:14px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.7;max-height:520px;overflow:auto}.k1{color:var(--muted)} .k2{color:var(--green)} .k3{color:var(--blue)} .k4{color:#8b5cf6} .k5{color:var(--red);font-weight:700}
+.details summary{cursor:pointer;color:var(--muted);font-size:13px;margin-bottom:10px}.footer{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}.loader{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:12px 14px;border-radius:10px;opacity:0;transform:translateY(20px);transition:.2s}.toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="between" style="margin-bottom:18px">
+    <div>
+      <h1 class="h1">Shadowrocket Config Generator</h1>
+      <div class="muted">Предустановки помогают начать, а ниже всё можно докрутить вручную.</div>
+    </div>
+    <div class="theme">
+      <button data-theme="auto" onclick="setTheme('auto')">Auto</button>
+      <button data-theme="light" onclick="setTheme('light')">Light</button>
+      <button data-theme="dark" onclick="setTheme('dark')">Dark</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="step"><span class="num">1</span><div><div class="title">Режим работы</div><div class="sub">Выбери подходящую логику, потом при желании всё поменяй ниже.</div></div></div>
+    <div class="presets">
+      <div class="preset" data-preset="selective" onclick="applyPreset('selective')">
+        <h3>Трафик напрямую</h3>
+        <p>Исключения иностранные сайты. Для стабильной работы 2ГИС</p>
+      </div>
+      <div class="preset" data-preset="global" onclick="applyPreset('global')">
+        <h3>Трафик через прокси</h3>
+        <p>Исключение для рф/ru сайтов. Для стабильных звонков и сообщений в мессенджерах</p>
+      </div>
+      <div class="preset" data-preset="whitelist" onclick="applyPreset('whitelist')">
+        <h3>Трафик по БС</h3>
+        <p>Сайты из разрешенного списка напрямую, а остальное через прокси</p>
+      </div>
+    </div>
+    <div id="presetHint" class="note" style="margin-top:12px">Ничего не выбрано. Можно сразу перейти к ручной настройке ниже.</div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card" style="margin-bottom:18px">
+        <div class="step"><span class="num">2</span><div><div class="title">Готовые наборы правил</div><div class="sub">Клик по чипу переключает состояние: выкл → proxy → direct → выкл.</div></div></div>
+        <div class="toolbar">
+          <button class="btn" onclick="clearAllChips()">Сбросить всё (очистить чипы)</button>
+        </div>
+        <div id="chips" class="chips"></div>
+      </div>
+
+      
+      <details class="details card" style="margin-bottom:18px; padding: 18px;">
+        <summary class="title" style="margin-bottom: 0; outline: none; font-weight: 700; color: var(--accent);">⚙️ Ручная настройка (для продвинутых)</summary>
+        <div style="margin-top: 18px;">
+          <div class="card" style="margin-bottom:18px">
+        <div class="step"><span class="num" style="display:none"></span><div><div class="title">Свои домены и списки</div><div class="sub">Можно добавлять домены, ключевые слова или готовые RULE-SET URL.</div></div></div>
+        <div class="row" style="margin-bottom:10px">
+          <div style="flex:1 1 260px">
+            <div class="sub" style="margin-bottom:6px">Тип доменных правил</div>
+            <select id="domainType"><option value="DOMAIN-SUFFIX">DOMAIN-SUFFIX</option><option value="DOMAIN">DOMAIN</option><option value="DOMAIN-KEYWORD">DOMAIN-KEYWORD</option><option value="RULE-SET">RULE-SET URL</option></select>
+          </div>
+          <div style="flex:1 1 220px">
+            <div class="sub" style="margin-bottom:6px">Действие</div>
+            <select id="domainAction"><option value="PROXY">PROXY</option><option value="DIRECT">DIRECT</option><option value="REJECT">REJECT</option></select>
+          </div>
+        </div>
+        <textarea id="customDomains" placeholder="youtube.com&#10;reddit.com&#10;tracker&#10;https://example.com/my-rules.list"></textarea>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="step"><span class="num" style="display:none"></span><div><div class="title">Свои IP / CIDR</div><div class="sub">По одному адресу или подсети на строку.</div></div></div>
+        <div class="row" style="margin-bottom:10px">
+          <div style="flex:1 1 220px">
+            <div class="sub" style="margin-bottom:6px">Действие</div>
+            <select id="ipAction"><option value="PROXY">PROXY</option><option value="DIRECT">DIRECT</option><option value="REJECT">REJECT</option></select>
+          </div>
+        </div>
+        <textarea id="customIPs" placeholder="1.2.3.4&#10;10.20.0.0/16"></textarea>
+      </div>
+
+      <div class="card">
+        <div class="step"><span class="num" style="display:none"></span><div><div class="title">Финальное правило</div><div class="sub">Что делать со всем трафиком, который не попал под правила выше.</div></div></div>
+        <div class="row" id="finalWrap">
+          <label><input type="radio" name="finalRule" value="DIRECT" checked> DIRECT</label>
+          <label><input type="radio" name="finalRule" value="PROXY"> PROXY</label>
+          <label><input type="radio" name="finalRule" value="REJECT"> REJECT</label>
+        </div>
+        <details class="details" style="margin-top:12px">
+          <summary>Продвинутые настройки основы</summary>
+          <div class="sub" style="margin-bottom:6px">Базовый конфиг</div>
+          <select id="baseConfig">
+            <option value="sr_ru_basic">Basic — основной</option>
+            <option value="sr_ru_geo">GEO — домены .ru/.su/.рф исключены из тоннеля</option>
+            <option value="sr_ru_whitelist">Whitelist — системный DNS</option>
+          </select>
+        </details>
+      </div>
+    </div>
+
+    <div>
+      
+        </div>
+      </details>
+<div class="card">
+        <div class="step"><span class="num">3</span><div><div class="title">Готовый файл</div><div class="sub">Файл собирается полностью в браузере.</div></div></div>
+        <div class="row">
+          <button id="downloadBtn" class="btn btn-primary" onclick="downloadConf()">Скачать .conf</button>
+          <button class="btn" onclick="copyConf()">Скопировать текст</button>
+          <button class="btn" onclick="copyLink()">Скопировать ссылку</button>
+        </div>
+        <div class="footer">
+          Файл собирается локально в браузере.<br>
+          <div style="margin-top: 8px;">
+            <a href="https://github.com/misha-tgshv/shadowrocket-configuration-file" target="_blank" style="color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--border);">Исходный код на GitHub</a>
+            &nbsp;|&nbsp;
+            <a href="https://mishatugushev.ru/" target="_blank" style="color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--border);">mishatugushev.ru</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+const RULE_SETS = [
+  { id:'ipcheckers', label:'IP Чекеры', url:'https://raw.githubusercontent.com/misha-tgshv/shadowrocket-configuration-file/main/rules/domains_ipchecker.list' },
+  { id:'geodetect', label:'GEO Чекеры (Расширенные)', url:'https://raw.githubusercontent.com/misha-tgshv/shadowrocket-configuration-file/main/rules/domains_geo_detect.list' },
+  { id:'community', label:'Пользовательский (из чата)', url:'https://raw.githubusercontent.com/misha-tgshv/shadowrocket-configuration-file/main/rules/domains_community.list', ipUrl:'https://raw.githubusercontent.com/misha-tgshv/shadowrocket-configuration-file/refs/heads/main/rules/domain_ips.list' },
+  { id:'bs_domain', label:'БС (домены)', url:'https://raw.githubusercontent.com/hxehex/russia-mobile-internet-whitelist/main/whitelist.txt' },
+  { id:'bs_ip', label:'БС (IP)', url:'https://raw.githubusercontent.com/hydraponique/roscomvpn-geoip/master/release/text/whitelist.txt' },
+  { id:'ru_banking', label:'Банки РФ', url:'https://raw.githubusercontent.com/misha-tgshv/shadowrocket-configuration-file/refs/heads/main/rules/domains_banking.list' },
+  { id:'telegram', label:'Telegram', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Telegram/Telegram.list', ipUrl:'https://github.com/toneywhitez/zkeen_rules/releases/latest/download/telegram_ips.list' },
+  { id:'whatsapp', label:'WhatsApp', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/WhatsApp/WhatsApp.list', ipUrl:'https://raw.githubusercontent.com/HybridNetworks/whatsapp-cidr/refs/heads/main/WhatsApp/whatsapp_cidr_ipv4.list' },
+  { id:'facebook', label:'Facebook', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Facebook/Facebook.list' },
+  { id:'meta_ips', label:'Meta (IPs)', ipUrl:'https://github.com/toneywhitez/zkeen_rules/releases/latest/download/meta_ips.list' },
+  { id:'instagram', label:'Instagram', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Instagram/Instagram.list' },
+  { id:'youtube', label:'YouTube', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/YouTube/YouTube.list' },
+  { id:'discord', label:'Discord', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Discord/Discord.list' },
+  { id:'twitter', label:'Twitter/X', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Twitter/Twitter.list' },
+  { id:'openai', label:'ChatGPT и ИИ', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list' },
+  { id:'github', label:'GitHub', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/GitHub/GitHub.list' },
+  { id:'google', label:'Google', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Google/Google.list' },
+  { id:'apple', label:'Apple', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Apple/Apple.list' },
+  { id:'tiktok', label:'TikTok', url:'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/TikTok/TikTok.list' }
+];
+const BASE_URL = 'https://raw.githubusercontent.com/misha-tgshv/shadowrocket-configuration-file/main/conf/';
+const PRESETS = {
+  selective: { base:'sr_ru_basic', final:'DIRECT', chips:{ community:'proxy', facebook:'proxy', meta_ips:'proxy', telegram:'proxy', whatsapp:'proxy', instagram:'proxy', youtube:'proxy', discord:'proxy', twitter:'proxy', openai:'proxy', tiktok:'proxy' }, checkers:['community','facebook','meta_ips','telegram','instagram','youtube','openai'], text:'Трафик напрямую: исключения иностранные сайты. Для стабильной работы 2ГИС.' },
+  global: { base:'sr_ru_geo', final:'PROXY', chips:{ ipcheckers:'direct' }, checkers:['ipcheckers'], text:'Трафик через прокси: исключение для рф/ru сайтов. Для стабильных звонков и сообщений в мессенджерах.' },
+  whitelist: { base:'sr_ru_whitelist', final:'PROXY', chips:{ bs_domain:'direct', bs_ip:'direct' }, checkers:['bs_domain','bs_ip'], text:'Трафик по БС: сайты из разрешенного списка напрямую, а остальное через прокси.' }
+};
+let chipState = Object.fromEntries(RULE_SETS.map(x => [x.id,'off']));
+let selectedPreset = '';
+let cacheName = null, cacheText = null;
+
+function $(id){return document.getElementById(id)}
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500)}
+function getThemePref(){return localStorage.getItem('sr-theme')||'auto'}
+function resolveAutoTheme(){const mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;if(mq)return mq.matches?'dark':'light';const h=new Date().getHours();return h>=7&&h<19?'light':'dark'}
+function applyTheme(m){const eff=m==='auto'?resolveAutoTheme():m;document.documentElement.classList.toggle('dark',eff==='dark');document.querySelectorAll('.theme button').forEach(b=>b.classList.toggle('active',b.dataset.theme===m))}
+function setTheme(m){localStorage.setItem('sr-theme',m);applyTheme(m)}
+if(window.matchMedia){window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(getThemePref()==='auto')applyTheme('auto')})}
+
+function renderChips(){
+  const box=$('chips'); box.innerHTML='';
+  RULE_SETS.forEach(r=>{
+    const st=chipState[r.id];
+    const div=document.createElement('div');
+    div.className='chip'+(st==='proxy'?' proxy':st==='direct'?' direct':'');
+    div.innerHTML=`<span>${r.label}</span><small>${st==='off'?'off':st}</small>`;
+    div.onclick=()=>{chipState[r.id]=st==='off'?'proxy':st==='proxy'?'direct':'off'; selectedPreset=''; syncPresetUI(); renderChips(); };
+    box.appendChild(div);
+  })
+}
+function syncPresetUI(){document.querySelectorAll('.preset').forEach(x=>x.classList.toggle('active',x.dataset.preset===selectedPreset)); $('presetHint').textContent=selectedPreset?PRESETS[selectedPreset].text:'Ничего не выбрано. Можно сразу перейти к ручной настройке ниже.'}
+function setFinal(v){const el=document.querySelector(`input[name=finalRule][value="${v}"]`); if(el) el.checked=true}
+function applyPreset(name){selectedPreset=name; chipState=Object.fromEntries(RULE_SETS.map(x=>[x.id,'off'])); const p=PRESETS[name]; Object.entries(p.chips).forEach(([k,v])=>chipState[k]=v); $('baseConfig').value=p.base; setFinal(p.final); syncPresetUI(); renderChips(); updateAll()}
+function setAllSelected(state){Object.keys(chipState).forEach(k=>{if(chipState[k]!=='off')chipState[k]=state}); selectedPreset=''; syncPresetUI(); renderChips(); updateAll()}
+function clearAllChips(){Object.keys(chipState).forEach(k=>chipState[k]='off'); selectedPreset=''; syncPresetUI(); renderChips(); updateAll()}
+function getFinalRule(){return document.querySelector('input[name=finalRule]:checked')?.value||'DIRECT'}
+
+function buildRuleLines(){
+  const lines=[];
+  const proxyChips=RULE_SETS.filter(r=>chipState[r.id]==='proxy');
+  const directChips=RULE_SETS.filter(r=>chipState[r.id]==='direct');
+  if(proxyChips.length){lines.push('# — Наборы через proxy —'); proxyChips.forEach(r=>{if(r.url) lines.push(`RULE-SET,${r.url},PROXY`); if(r.ipUrl) lines.push(`RULE-SET,${r.ipUrl},PROXY,no-resolve`)})}
+  if(directChips.length){lines.push('# — Наборы напрямую —'); directChips.forEach(r=>{if(r.url) lines.push(`RULE-SET,${r.url},DIRECT`); if(r.ipUrl) lines.push(`RULE-SET,${r.ipUrl},DIRECT,no-resolve`)})}
+  const dtype=$('domainType').value, da=$('domainAction').value, domains=$('customDomains').value.trim();
+  if(domains){lines.push('# — Мои домены / списки —'); domains.split(/\n/).map(x=>x.trim()).filter(Boolean).forEach(v=>{if(dtype==='RULE-SET'){lines.push(`RULE-SET,${v},${da}`)}else{let d=v.replace(/^https?:\/\//,'').replace(/\/.*$/,'').replace(/^www\./,''); lines.push(`${dtype},${d},${da}`)}})}
+  const ia=$('ipAction').value, ips=$('customIPs').value.trim();
+  if(ips){lines.push('# — Мои IP —'); ips.split(/\n/).map(x=>x.trim()).filter(Boolean).forEach(v=>lines.push(`IP-CIDR,${v},${ia},no-resolve`))}
+
+  if($('baseConfig').value === 'sr_ru_geo') {
+    lines.push('# — Обход RU зоны (GEO) —');
+    lines.push('GEOIP,RU,DIRECT');
+  }
+
+  lines.push(`FINAL,${getFinalRule()}`);
+  return lines;
+}
+function renderPreview(){const lines=buildRuleLines(); $('preview').innerHTML=lines.map(line=>line.startsWith('#')?`<span class="k1">${escapeHtml(line)}</span>`:line.startsWith('RULE-SET')&&line.includes(',PROXY')?`<span class="k2">${escapeHtml(line)}</span>`:line.startsWith('RULE-SET')&&line.includes(',DIRECT')?`<span class="k3">${escapeHtml(line)}</span>`:line.startsWith('DOMAIN')?`<span class="k4">${escapeHtml(line)}</span>`:line.startsWith('IP-CIDR')?`<span class="k3">${escapeHtml(line)}</span>`:line.startsWith('FINAL')?`<span class="k5">${escapeHtml(line)}</span>`:escapeHtml(line)).join('\n')||'<span class="k1">(пусто)</span>'}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function updateLogic(){const parts=[]; const proxy=RULE_SETS.filter(r=>chipState[r.id]==='proxy').map(r=>r.label); const direct=RULE_SETS.filter(r=>chipState[r.id]==='direct').map(r=>r.label); if(proxy.length) parts.push(`через proxy: ${proxy.join(', ')}`); if(direct.length) parts.push(`напрямую: ${direct.join(', ')}`); if($('customDomains').value.trim()) parts.push(`свои домены: ${$('domainAction').value}`); if($('customIPs').value.trim()) parts.push(`свои IP: ${$('ipAction').value}`); parts.push(`остальное: ${getFinalRule()}`); $('logic').textContent=parts.join(' · ')}
+function updateAll(){}
+
+function cleanBaseConf(text){text=text.replace(/^update-url\s*=.*$/m,''); const s=text.indexOf('# [Proxy Group]'); const e=text.indexOf('# Опционально'); if(s!==-1&&e!==-1&&e>s){const ls=text.lastIndexOf('\n',s-1)+1; text=text.slice(0,ls)+text.slice(e)} return text.replace(/\n{3,}/g,'\n\n')}
+async function fetchBaseConf(name){ if(cacheName===name&&cacheText) return cacheText; const r=await fetch(BASE_URL+name+'.conf'); if(!r.ok) throw new Error('Не удалось загрузить базовый конфиг'); cacheName=name; cacheText=cleanBaseConf(await r.text()); return cacheText; }
+async function buildConf(){ const base=await fetchBaseConf($('baseConfig').value); const idx=base.indexOf('\n[Rule]'); const header=idx!==-1?base.slice(0,idx):base; return `# Generated by shadowrocket-config-generator | ${new Date().toUTCString()}\n# https://misha-tgshv.github.io/shadowrocket-configuration-file/\n`+header+'\n[Rule]\n'+buildRuleLines().join('\n')+'\n'; }
+async function downloadConf(){ const btn=$('downloadBtn'); btn.disabled=true; btn.innerHTML='<span class="loader"></span>Генерирую...'; try{const conf=await buildConf(); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([conf],{type:'text/plain'})); a.download=`shadowrocket_${$('baseConfig').value}_custom.conf`; a.click(); toast('Файл скачан');}catch(e){toast(e.message)} finally{btn.disabled=false; btn.textContent='Скачать .conf'} }
+async function copyConf(){try{await navigator.clipboard.writeText(await buildConf()); toast('Конфиг скопирован')}catch(e){toast('Не удалось скопировать')}}
+function copyLink(){const p=new URLSearchParams(); p.set('base',$('baseConfig').value); p.set('final',getFinalRule()); p.set('theme',getThemePref()); if(selectedPreset) p.set('preset',selectedPreset); const chips=Object.entries(chipState).filter(([,v])=>v!=='off').map(([k,v])=>`${k}:${v}`); if(chips.length) p.set('chips',chips.join(',')); if($('customDomains').value.trim()) p.set('d',btoa(unescape(encodeURIComponent($('customDomains').value.trim())))); if($('customIPs').value.trim()) p.set('i',btoa(unescape(encodeURIComponent($('customIPs').value.trim())))); p.set('dt',$('domainType').value); p.set('da',$('domainAction').value); p.set('ia',$('ipAction').value); navigator.clipboard.writeText(location.origin+location.pathname+'?'+p.toString()).then(()=>toast('Ссылка скопирована')) }
+function restore(){const p=new URLSearchParams(location.search); ['baseConfig','domainType','domainAction','ipAction'].forEach(id=>{const key={baseConfig:'base',domainType:'dt',domainAction:'da',ipAction:'ia'}[id]; if(p.get(key)) $(id).value=p.get(key)}); if(p.get('final')) setFinal(p.get('final')); if(p.get('chips')){p.get('chips').split(',').forEach(x=>{const [id,st]=x.split(':'); if(id&&st) chipState[id]=st})} if(p.get('d')){try{$('customDomains').value=decodeURIComponent(escape(atob(p.get('d'))))}catch(e){}} if(p.get('i')){try{$('customIPs').value=decodeURIComponent(escape(atob(p.get('i'))))}catch(e){}} if(p.get('theme')) localStorage.setItem('sr-theme',p.get('theme')); if(p.get('preset')&&PRESETS[p.get('preset')]){selectedPreset=p.get('preset'); syncPresetUI()} }
+['domainType','domainAction','ipAction','baseConfig'].forEach(id=>$(id).addEventListener('change',()=>{selectedPreset=''; syncPresetUI(); updateAll()})); ['customDomains','customIPs'].forEach(id=>$(id).addEventListener('input',()=>{selectedPreset=''; syncPresetUI(); updateAll()})); document.querySelectorAll('input[name=finalRule]').forEach(x=>x.addEventListener('change',()=>{selectedPreset=''; syncPresetUI(); updateAll()}));
+restore(); applyTheme(getThemePref()); renderChips(); syncPresetUI(); 
+</script>
+</body>
+</html>
